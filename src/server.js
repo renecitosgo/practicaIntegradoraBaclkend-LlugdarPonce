@@ -3,6 +3,8 @@ const express = require("express")
 const handlebars = require("express-handlebars")
 const viewsRouter = require("./routes/views.router.js")
 const usersRouter = require("./routes/api/users.router.js")
+const productsRouter = require("./routes/api/products.router")
+
 
 const { connectDB } = require("./config/index.js")
 
@@ -28,15 +30,11 @@ app.engine("hbs", handlebars.engine({
 app.set("views", __dirname+"/views")
 app.set("view engine", "hbs")
 
-// urbase/products -> html con productos
-// urbase/users
-
-
 connectDB()
 
 
 app.use("/", viewsRouter)
-// url-base/api/products -> json
+app.use("/api/products", productsRouter)
 app.use("/api/users", usersRouter)
 
 app.listen (PORT, err => {
