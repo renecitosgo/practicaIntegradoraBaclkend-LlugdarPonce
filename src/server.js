@@ -4,6 +4,7 @@ const handlebars = require("express-handlebars")
 const viewsRouter = require("./routes/views.router.js")
 const usersRouter = require("./routes/api/users.router.js")
 const productsRouter = require("./routes/api/products.router")
+const cartsRouter = require("./routes/api/carts.router.js")
 
 
 const { connectDB } = require("./config/index.js")
@@ -36,6 +37,7 @@ connectDB()
 app.use("/", viewsRouter)
 app.use("/api/products", productsRouter)
 app.use("/api/users", usersRouter)
+app.use("/api/cart", cartsRouter)
 
 app.listen (PORT, err => {
     if (err)console.log("error: ", err)
