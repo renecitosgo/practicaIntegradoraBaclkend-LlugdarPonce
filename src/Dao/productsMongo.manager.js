@@ -5,7 +5,7 @@ const mongoose = require("mongoose")
 class ProductsManager {
 
     constructor() {
-        console.log('ProductsManager instance created');
+        console.log('ProductsManager instance created')
     }
 
     async getAllProducts() {

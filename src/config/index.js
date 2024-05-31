@@ -9,4 +9,4 @@ exports.connectDB = () => {
 }
 
 
-// insertBatteries(batteries) EJECUCION DE INSERTAR BATERÍAS
+// insertBatteries(batteries) EJECUCION DE INSERTAR BATERÍAS en Mongo

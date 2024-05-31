@@ -55,7 +55,7 @@
 //                 productManager.addProducts(title, description, price, thumbnails, code, stock)
 //                 productManager.saveProducts()
 //             }
-//             res.status(200).send({status: "success", message: "Producto(s) argerado(s) 🎆🙂"})
+//             res.status(200).send({status: "success", message: "Producto(s) argerado(s) 🙂"})
 
 //         }catch(error){
 //             res.status(400).send({error: "error", message: error.message})

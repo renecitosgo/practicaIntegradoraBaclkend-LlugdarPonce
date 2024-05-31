@@ -56,7 +56,7 @@
 //     try {
 //         const id = Number(req.params.id);
 //         cartManager.deleteCartById(id)
-//         res.send({ message: "Carrito eliminado satisfactoriamente!🙂" })
+//         res.send({ message: "Carrito eliminado satisfactoriamente!" })
 //     } catch (error) {
 //         res.status(500).send({ error: error.message })
 //     }

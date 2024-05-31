@@ -1,5 +1,5 @@
-const multer = require("multer");
-const { dirname } = require("path");
+const multer = require("multer")
+const { dirname } = require("path")
 
 
 console.log(dirname(__dirname))

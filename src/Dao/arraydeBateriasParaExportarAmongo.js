@@ -1,39 +1,42 @@
 const OrderModel = require("../models/order.model")
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 
 console.log(OrderModel)
 
 async function insertBatteries(batteries) {
     try {
         if (!OrderModel) {
-            throw new Error("OrderModel no está definido");
+            throw new Error("OrderModel no está definido")
         }
 
-        const result = await OrderModel.insertMany(batteries);
-        console.log("Baterías insertadas correctamente", result);
+        const result = await OrderModel.insertMany(batteries)
+        console.log("Baterías insertadas correctamente", result)
     } catch (error) {
-        console.error("Error al insertar baterías", error);
+        console.error("Error al insertar baterías", error)
     }
 }
 
 class OrderManager {
     constructor() {
-        console.log('OrdersManager instance creada');
+        console.log('OrdersManager instance creada')
     }
 
     async getAllOrders() {
         // return await OrderModel.find({})
         try {
-            const orders = await OrderModel.find({});
-            return orders;
+            const orders = await OrderModel.find({})
+            return orders
         } catch (error) {
-            console.error('Error al obtener órdenes', error);
-            throw error;
+            console.error('Error al obtener órdenes', error)
+            throw error
         }
         // const orders = await OrderModel.paginate();
         return orders;
     }
 }
+
+// Array batteries para insertar en mongo masivamente
+
 const batteries = [
     {
         title: "Batería de Litio 18650",
@@ -311,4 +314,3 @@ const batteries = [
 
 
 module.exports = { insertBatteries, batteries, OrderManager }
-// module.exports = { OrderManager }

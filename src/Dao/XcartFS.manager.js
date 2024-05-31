@@ -109,7 +109,7 @@
 //             }
 //             const data = await fs.readFile(this.path, 'utf-8')
 //             if (!data.trim()) {
-//                 console.log("El archivo de carrito está vacío. No se cargará ningún carrito 👌")
+//                 console.log("El archivo de carrito está vacío. No se cargará ningún carrito")
 //                 return
 //             }
 //             const { idProximo, carts } = JSON.parse(data)
