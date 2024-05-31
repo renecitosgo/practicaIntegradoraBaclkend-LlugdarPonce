@@ -1,49 +1,63 @@
-const { Router } = require ("express")
-const { productsModel } = require("../../models/products.model")
+const express = require('express')
+const router = express.Router()
+const productsManager = require('../../dao/productsMongo.manager')
 
-const router = Router()
 
-router.get("/", async(req, res)=> {
-    const productList = await productsModel.find({})
-    res.send({status:"success", payload: productList })
-})
 
-router.post("/", async (req, res)=>{
-    try{
-        const { body } = req
-        const result = await productsModel.create(body)
-        res.send({status: "success", payload: result})
-    }catch(error){
-        res.status(400).send({error: "error", message: error.message})
+
+router.get("/", async (req, res) => {
+
+    try {
+        const productList = await productsManager.getAllProducts()
+        res.send({ status: "success", payload: productList })
+    } catch (error) {
+        console.error(error)
+        res.status(500).send({ status: "error", message: error.message })
     }
 })
 
-router.get("/:pid", async (req, res)=>{
-    const { pid } = req.params
-    const productFound = await productsModel.findOne({_id: pid})
-    res.send({status: "success", payload: productFound})
-})
 
-
-router.put("/:pid", async (req, res)=>{
-    const { pid } = req.params
-    const productUpdate = req.body
-
-    try{
-        const result = await productsModel.findByIdAndUpdate(pid, productUpdate, {new: true})
-        res.send({status: "success", payload: result})
-    }catch(error){
-        res.status(400).send({ error: "error", message: error.message })
+router.post("/", async (req, res) => {
+    
+    try {
+        const result = await productsManager.createProduct(req.body)
+        res.send({ status: "success", payload: result })
+    } catch (error) {
+        res.status(400).send({ status: "error", message: error.message })
     }
 })
 
-router.delete("/:pid", async (req, res)=>{
-    const { pid } = req.params
 
-    try{
-        await productsModel.findByIdAndDelete(pid)
+router.get("/:pid", async (req, res) => {
+
+    try {
+        const productFound = await productsManager.getProductById(req.params.pid)
+        res.send({ status: "success", payload: productFound })
+    } catch (error) {
+        res.status(400).send({ status: "error", message: error.message })
+    }
+})
+
+
+router.put("/:pid", async (req, res) => {
+
+    try {
+        const result = await productsManager.updateProduct(req.params.pid, req.body)
+        res.send({ status: "success", payload: result })
+    } catch (error) {
+        res.status(400).send({ status: "error", message: error.message })
+    }
+})
+
+
+router.delete("/:pid", async (req, res) => {
+
+    try {
+        await productsManager.deleteProduct(req.params.pid)
         res.send({ status: "success", message: "Producto eliminado 💔" })
-    }catch(error){ res.status(400).send({status: "error", error: error.message })}
+    } catch (error) {
+        res.status(400).send({ status: "error", message: error.message })
+    }
 })
 
 module.exports = router

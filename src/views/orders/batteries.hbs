@@ -1,0 +1,22 @@
+<h1>Listado de Baterías</h1>
+<ul>
+    {{#each batterias}}
+        <li>
+            <strong>{{title}}</strong>
+            <p>{{description}}</p>
+            <p>Código: {{code}}</p>
+            <p>Stock: {{stock}}</p>
+            <p>Tamaño: {{size}}</p>
+        </li>
+    {{/each}}
+</ul>
+
+<div>
+    {{#if hasPrevPage}}
+        <a href="?page={{prevPage}}">Anterior</a>
+    {{/if}}
+
+    {{#if hasNextPage}}
+        <a href="?page={{nextPage}}">Siguiente</a>
+    {{/if}}
+</div>

@@ -5,13 +5,16 @@ const viewsRouter = require("./routes/views.router.js")
 const usersRouter = require("./routes/api/users.router.js")
 const productsRouter = require("./routes/api/products.router")
 const cartsRouter = require("./routes/api/carts.router.js")
+const ordersRouter = require("./routes/api/orders.router.js")
 
 
 const { connectDB } = require("./config/index.js")
 
 
 const app = express()
+
 const PORT = process.env.PORT || 8080
+
 
 app.use(express.json())
 
@@ -38,6 +41,7 @@ app.use("/", viewsRouter)
 app.use("/api/products", productsRouter)
 app.use("/api/users", usersRouter)
 app.use("/api/cart", cartsRouter)
+app.use("/api/orders", ordersRouter)
 
 app.listen (PORT, err => {
     if (err)console.log("error: ", err)

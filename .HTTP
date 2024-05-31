@@ -5,15 +5,17 @@
 
 # GET http://localhost:8080/api/users
 
-# ###
+
 # POST http://localhost:8080/api/users
 
 # Content-Type: application/json
 
-# {
-#     "first_name": "Prueba4",
-#     "last_name": "Prueba4",
-#     "email": "Prueba4@gmail.com"
+# { "title": "Batería 12x91",
+# "description": "batería 12x91 para camioneta",
+# "price": 124000,
+# "thumbnails": "Array (1)",
+# "code": 121212234,
+# "stock": 31
 # }
 
 
