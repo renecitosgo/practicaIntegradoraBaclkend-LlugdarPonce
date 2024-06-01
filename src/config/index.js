@@ -8,5 +8,5 @@ exports.connectDB = () => {
     console.log("DB Conected")
 }
 
-
+// console.log("te amo papá y  sos el mejor y me alegra que este trabajando como vos")
 // insertBatteries(batteries) EJECUCION DE INSERTAR BATERÍAS en Mongo
