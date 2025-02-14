@@ -1,6 +1,6 @@
 const { connect } = require("mongoose")
 const { OrderModel } = require("../models/order.model")
-const { insertBatteries, batteries } = require("../dao/arraydeBateriasParaExportarAmongo")
+const { insertBatteries, batteries } = require("../dao/orderMongo.manager")
 
 
 exports.connectDB = () => {

@@ -1,8 +1,10 @@
 const { Router } = require("express")
 const { uploader } = require("../utils/multer.js")
 const { productService } = require("../dao/productsMongo.manager.js")
-const { insertBatteries, batteries } = require("../dao/arraydeBateriasParaExportarAmongo")
+const { insertBatteries, batteries } = require("../dao/orderMongo.manager.js")
 const OrderModel = require("../models/order.model")
+const userService = require ("../dao/usersMongo.manager")
+const auth = require("../middlewares/auth.middleware")
 
 const router = Router()
 
@@ -10,18 +12,17 @@ router.get("/", (req, res) => {
     res.render("index")
 })
 
-router.get("/login", (req, res) => {
-    res.render("index")
-})
-
-router.get("/register", (req, res) => {
-    res.render("index")
-})
-
 router.get("/profile", (req, res) => {
     res.render("index")
 })
 
+router.get("/login", (req, res) => {
+    res.render("login")
+})
+
+router.get("/register", (req,res)=>{
+    res.render("register")
+})
 
 router.get("/products", async (req, res) => {
     console.log('GET /products')
@@ -41,6 +42,36 @@ router.get("/products", async (req, res) => {
         
     }
 })
+
+// ruta para renderizar usuarios: Protegida con middleware "auth" (solo para administradores)
+router.get("/users", auth, async (req, res) => {
+    try {
+        const { numPage, limit } = req.query
+
+        const {users, hasNextPage, hasPrevPage, nextPage, prevPage, page } = await        userService.getAllUsers(
+                parseInt(numPage) || 1,
+                parseInt(limit) || 5
+        )
+
+        res.render("users", {
+            users,
+            hasNextPage,
+            hasPrevPage,
+            nextPage,
+            prevPage,
+            page
+        })
+    } catch (error) {
+        console.error("Error al obtener los usuarios:", error.message)
+        res.status(500).send({ error: "Ocurrió un error al obtener los usuarios." })
+    }
+})
+
+
+
+
+
+
 
 // Ruta para renderizar baterías:   
 router.get("/batteriesGet", async (req, res) => {
@@ -63,7 +94,8 @@ router.get("/batteriesGet", async (req, res) => {
             hasNextPage: batteriesGet.hasNextPage,
             hasPrevPage: batteriesGet.hasPrevPage,
             nextPage: batteriesGet.nextPage,
-            prevPage: batteriesGet.prevPage
+            prevPage: batteriesGet.prevPage,
+            page: batteriesGet.page
         })
     } catch (error) {
         console.error('Error al obtener baterías paginadas:', error.message)
@@ -72,7 +104,7 @@ router.get("/batteriesGet", async (req, res) => {
 })
 
 
-// Ruta para insertar baterías
+// Ruta para insertar baterías (no debería estar aqui un POST)
 router.post("/insert-batteries", async (req, res) => {
     try {
         // Llama a insertBatteries solo cuando se accede a esta ruta
