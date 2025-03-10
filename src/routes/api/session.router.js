@@ -1,6 +1,9 @@
 const express = require('express')
 const sessionsRouter = express.Router()
-const userService = require('../../dao/usersMongo.manager')
+const UserDaoMongo = require('../../Dao/usersDao.Mongo')
+const userService = require("../../services/index.js")
+const userController = require("../../controllers/users.controllers.js")
+// const userService = require('../../dao/usersMongo.manager')
 const auth = require('../../middlewares/auth.middleware')
 const { createHash, isValidPassword } = require("../../utils/bcrypt")
 const passport = require ("passport")
@@ -11,58 +14,64 @@ const passportCall = require("../../utils/passportCall")
 const authorization = require('../../utils/authorizationJwt')
 
 // antes de passport// ------------------------------------------comienzo
-sessionsRouter.post("/register", async (req, res) => {
 
-    const { first_name, last_name, email, password } = req.body
+// ------------------comeinzo de antes de controller-----------------------------
+// sessionsRouter.post("/register", userController.createUser, async (req, res) => {
 
-    if (!first_name || !last_name || !email || !password) {
-        return res.status(400).send({ error: "Faltan datos obligatorios" })
-    }
+//     const { first_name, last_name, email, password } = req.body
 
-    console.log("Datos recibidos para registro:", req.body)
+//     if (!first_name || !last_name || !email || !password) {
+//         return res.status(400).send({ error: "Faltan datos obligatorios" })
+//     }
 
-    try {
-        // Verificación inicial del usuario
-        const userExist = await userService.getUserBy({ email })
+//     console.log("Datos recibidos para registro:", req.body)
 
-        if (userExist) {
-            console.log("Usuario ya existe:", userExist)
-            return res.status(401).send({ status: "error", error: "El usuario ya existe" })
-        }
+//     try {
+//         // Verificación inicial del usuario
+//         const userExist = await userService.getItem({ email })
 
-        // Creación del nuevo usuario
-        const newUser = await userService.createUser({ 
-            first_name,
-            last_name,
-            email,
-            password: createHash(password) //hay que encriptar 
-        })
-        // console.log("Nuevo usuario creado:", newUser) 
-        // este log no esta protegiendo datos de usuario... es recomendable pasar newUser por la funcion filterSensitiveData() y usar siempre lo que retorna esta funcion... es decir... un usuario filtrado sin contraseña: filteredUser
+//         if (userExist) {
+//             console.log("Usuario ya existe:", userExist)
+//             return res.status(401).send({ status: "error", error: "El usuario ya existe" })
+//         }
 
-        const filteredUser = filterSensitiveData(newUser, [ "password" ])
-        console.log("Datos protegidos del usuario:", filteredUser)
+//         // Creación del nuevo usuario
+//         const newUser = await userController.createItem({ 
+//             first_name,
+//             last_name,
+//             email,
+//             password: createHash(password) //hay que encriptar 
+//         })
+//         console.log("Nuevo usuario creado:", newUser) 
+//         // este log no esta protegiendo datos de usuario... es recomendable pasar newUser por la funcion filterSensitiveData() y usar siempre lo que retorna esta funcion... es decir... un usuario filtrado sin contraseña: filteredUser
+
+//         const filteredUser = filterSensitiveData(newUser, [ "password" ])
+//         console.log("Datos protegidos del usuario:", filteredUser)
 
 
         
-        //datos dentro del token
-        const token = generateToken({
-            id: filteredUser._id,
-            email
-        })
+//         //datos dentro del token
+//         const token = generateToken({
+//             id: filteredUser._id,
+//             email
+//         })
 
-        res.cookie("coderCookieToken", token, {
-            maxAge: 60*60*1000*24,
-            httpOnly: true
-        }).send({status: "success"})
+//         res.cookie("coderCookieToken", token, {
+//             maxAge: 60*60*1000*24,
+//             httpOnly: true
+//         }).send({status: "success"})
 
-    } catch (error) {
+//     } catch (error) {
 
-        console.error("Error en el proceso de registro:", error.message)
-        res.status(500).send({ status: "Error", message: error.message })
+//         console.error("Error en el proceso de registro:", error.message)
+//         res.status(500).send({ status: "Error", message: error.message })
 
-    }
-})
+//     }
+// })
+
+// ------------------fin de antes de controller-----------------------------
+
+sessionsRouter.post("/register", userController.createUser) 
 
 
 
@@ -70,17 +79,24 @@ sessionsRouter.post("/login", async (req, res)=>{
 
     const { email, password } = req.body
 
-    console.log(req.body)
+    console.log("Body recibido en la solicitud:", req.body);
+
 
     if (!email || !password) {
         return res.status(400).send({ error: "Faltan datos obligatorios" })
     }
 
-    const userFound = await userService.getUserBy({ email })
+    const userFound = await userService.getItem({ email })
     if(!userFound) return res.status(404).send({status: "error", error: "Usuario no encotrado"})
 
-    // const isValid = isValidPassword(password, { password: userFound.password })
-    if(!isValidPassword(password,  { password: userFound.password })) return res.status(401).send({status: "error", error: "Password incorrecto"})
+    const isValid = isValidPassword(password, userFound.password)
+        console.log("Resultado de la comparación: ", isValid)
+        console.log("Contraseña ingresada:", password);
+        console.log("Contraseña almacenada:", userFound.password);
+        console.log("Contraseña ingresada:", password, typeof password);
+        console.log("Contraseña almacenada:", userFound.password, typeof userFound.password);
+    
+    if (!isValid) return res.status(401).send({status: "error", error: "Password incorrecto"})
 
 
     const { first_name, last_name, role } = userFound
@@ -104,7 +120,7 @@ sessionsRouter.post("/login", async (req, res)=>{
     console.log("Token generado:", token);
     // console.log(req.session.user)
 
-    res.cookie("coderCookieToken", token, {
+    res.cookie("cookieCreadaEnLogin", token, {
         maxAge: 60*60*1000*24,
         httpOnly: true
     }).send({status: "success",
@@ -213,4 +229,4 @@ sessionsRouter.get("/logout", (req, res)=>{
 
 
 
-module.exports = sessionsRouter
+    module.exports = sessionsRouter

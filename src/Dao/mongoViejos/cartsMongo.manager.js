@@ -1,5 +1,5 @@
-const { cartModel } = require("../models/cart.model");
-const { productsModel } = require("../models/products.model");
+const { cartModel } = require("../../models/cart.model");
+const { productsModel } = require("../../models/products.model");
 const mongoose = require("mongoose")
 
 class CartManager {

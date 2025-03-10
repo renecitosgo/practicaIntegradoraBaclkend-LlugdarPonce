@@ -14,8 +14,9 @@ class RouterClass {
         console.log("Procesando callbacks:", callbacks);
         return callbacks.map((callback) => async (...params) => {
             try {
-                console.log("Ejecutando callback:", callback.name || "callback anónimo");
+                // console.log("Ejecutando callback:", callback.name || "callback anónimo");
                 await callback.apply(this, params);
+                
             } catch (error) {
                 console.log("Error en callback:", error);
                 params[1].status(500).send({ status: "error", message: error.message });
@@ -74,24 +75,7 @@ class RouterClass {
         );
     }
 
-    put = (path, policies, ...callbacks) => {
-        this.router.put(
-            path,
-            (req, res, next) => this.generateCustomResponse(req, res, next), // Middleware para respuestas personalizadas
-            this.handPolicies(policies),
-            ...this.applyCallbacks(callbacks) // Aplica los callbacks procesados
-        );
-    }
-
-    delete = (path, policies, ...callbacks) => {
-        this.router.delete(
-            path,
-            (req, res, next) => this.generateCustomResponse(req, res, next), // Middleware para respuestas personalizadas
-            this.handPolicies(policies),
-            ...this.applyCallbacks(callbacks) // Aplica los callbacks procesados
-        );
-    }
-
+    
 
 }
 

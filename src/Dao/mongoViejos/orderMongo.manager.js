@@ -1,7 +1,7 @@
-const OrderModel = require("../models/order.model")
+const OrderModel = require("../../models/order.model")
 const mongoose = require('mongoose')
 
-console.log(OrderModel)
+// console.log(OrderModel)
 
 async function insertBatteries(batteries) {
     try {

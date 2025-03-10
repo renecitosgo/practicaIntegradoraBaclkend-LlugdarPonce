@@ -1,6 +1,6 @@
 const passport = require ("passport")
 // 1 const localStrategy = require ("passport-local").Strategy
-const userService = require('../dao/usersMongo.manager')
+// const userService = require('../dao/mongoViejos/usersMongo.manager')
 const { createHash, isValidPassword } = require ("../utils/bcrypt")
 //2 const GithubStrategy = require("passport-github2")
 const jwt = require("passport-jwt")

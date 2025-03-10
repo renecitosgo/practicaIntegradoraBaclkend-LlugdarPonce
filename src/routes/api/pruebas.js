@@ -2,11 +2,47 @@ const express = require("express")
 const auth = require("../../middlewares/auth.middleware")
 const router = express.Router()
 
+const { fork } = require("child_process")
+
+
+
 
 // este endPoint solo lo puede ver el administrador
 router.get("/current", auth ,(req, res)=>{
     res.send("Datos sensibles que solo puede ver el admin!😎")
 })
+
+
+
+
+
+// ----------------------------------------------comienzo Process
+
+// function operacionCompleja(params){
+    
+    
+
+// }
+
+
+// router.get("/simple", (req, res) => {
+//     const result = operacionCompleja()
+//     res.send({result})
+//     console.log(result)
+// })
+
+// router.get("/compleja", (req, res) => {
+//     const child = fork("./src/routes/api/operacionCompleja.js")
+
+//     child.send("Inicia el calculo...")
+//     child.on("message", result => {
+//         res.send({result})
+//     })
+// })
+
+
+
+// -------------------------------------------------------------------fin Process
 
 // class Prueba {
 //     constructor(nombre, apellido, edad, genero){

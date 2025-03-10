@@ -7,15 +7,15 @@ class SessionRouter extends RouterClass {
 
         // Llama explícitamente al método init()
         this.init();
-        console.log("Método init() llamado en constructor de SessionRouter.");
+        // console.log("Método init() llamado en constructor de SessionRouter.");
     }
 
     init() {
-        console.log("Inicializando rutas de SessionRouter...");
+        // console.log("Inicializando rutas de SessionRouter...");
 
         // Registrar la ruta /login
         this.get("/login", (req, res) => {
-            console.log("Ruta /login ejecutada");
+            // console.log("Ruta /login ejecutada");
             res.send("Hola desde SessionRouter extends RouterClass");
         });
 
@@ -32,7 +32,7 @@ class SessionRouter extends RouterClass {
             
         });
 
-        console.log("Rutas de SessionRouter inicializadas.");
+        // console.log("Rutas de SessionRouter inicializadas.");
     }
 }
 

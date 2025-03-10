@@ -1,35 +1,35 @@
 const { usersModel } = require("../models/users.model")
 const mongoosePaginate = require ("mongoose-paginate-v2")
+const mongoose = require("mongoose")
 
+// Este es el DAO ((Data Access Object) es un patrón de diseño que maneja el acceso a la base de datos) y se comunica directamente con la base de datos
 
-class UsersManager {
+class UsersDaoMongo {
 
 
     constructor (){
         this.accesoAlUsersModel = usersModel
-        console.log("User Instance Created")
+        // console.log("User Instance Created") 
     }
 
 
 
-    async getAllUsers(page = 1, limit = 5) {
+    async getAll (page = 1, limit) {
         try {
+            console.log(`Paginación: Página ${page}, Límite ${limit}`)
             const options = {
                 page,
                 limit,
-                lean: true
+                lean: true      
             }
 
             const allUsers = await this.accesoAlUsersModel.paginate({}, options)
 
-            if(!allUsers.docs.length){
-                throw new Error ("No se pudo traer a los usuarios, quizá no existan")
-            }
     
             return {
                 users: allUsers.docs,
                 totalDocs: allUsers.totalDocs,
-                hasNextPage: allUsers.totalPages,
+                hasNextPage: allUsers.hasNextPage,
                 hasPrevPage: allUsers.hasPrevPage,
                 nextPage: allUsers.nextPage,
                 prevPage: allUsers.prevPage,
@@ -44,17 +44,20 @@ class UsersManager {
 
 
 
-    async createUser(userData){
+    async create(userData){
 
         try{
 
-            const createdUser = await this.accesoAlUsersModel.create(userData)
+            const createdUser = await this.accesoAlUsersModel.create(userData) 
+            // Este createdUser es el que viaja de regreso por todas las capas hasta llegar al controlador.
+            // createdUser (obtenido de la BD) 1 de 5 flujo de retorno de datos
 
             if(!createdUser){
                 throw new Error ("No se pudo crear el Usuario")
             }
 
             return createdUser
+            //  return createdUser; en UserDaoMongo.create() 2 de 5 flujo de retorno de datos
 
         }catch(error){
             console.error (`Error: ${error.message}`)
@@ -64,12 +67,9 @@ class UsersManager {
 
 
 
-    async getUserBy(filter) {
+    async getBy(filter) {
         try {
-            console.log("Filtro utilizado para la búsqueda:", filter)
             const user = await this.accesoAlUsersModel.findOne(filter)
-            console.log("Resultado de la búsqueda:", user)
-        
             // Si encuentra al usuario, lo devuelve
             return user
     
@@ -80,23 +80,11 @@ class UsersManager {
     }
     
 
-    async updateUserById(id, updateDataUser) {
+    async update(id, updateDataUser) {
 
             try {
-                if(!monggose.Types.ObjectId.isValid(id)){
-                    throw new Error ("El ID proporcionado no es válido")
-                }
-
-                if(!updateDataUser || Object.keys(updateDataUser).length === 0){
-                    throw new Error ("Los datos de actualización no pueden estar vacíos.")
-                }
-
-
+                
                 const updatedUser = await this.accesoAlUsersModel.findByIdAndUpdate(id, updateDataUser, { new: true })
-
-                if(!updatedUser){
-                    throw new Error ("No se pudo actualizar el usuario")
-                }
 
                 return updatedUser
 
@@ -109,7 +97,7 @@ class UsersManager {
 
 
 
-    async deleteUserById(id){
+    async delete(id){
         try {
             if(!mongoose.Types.ObjectId.isValid(id)){
                 throw new Error ("El Id proporcionado no es Válido")
@@ -134,4 +122,4 @@ class UsersManager {
     }
 }
 
-module.exports = new UsersManager ()
+module.exports = new UsersDaoMongo ()

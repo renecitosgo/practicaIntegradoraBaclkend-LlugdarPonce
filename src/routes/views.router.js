@@ -1,10 +1,11 @@
 const { Router } = require("express")
 const { uploader } = require("../utils/multer.js")
-const { productService } = require("../dao/productsMongo.manager.js")
-const { insertBatteries, batteries } = require("../dao/orderMongo.manager.js")
+const { productService } = require("../Dao/mongoViejos/productsMongo.manager.js")
+const { insertBatteries, batteries } = require("../Dao/mongoViejos/orderMongo.manager.js")
 const OrderModel = require("../models/order.model")
-const userService = require ("../dao/usersMongo.manager")
-const auth = require("../middlewares/auth.middleware")
+// const userService = require ("../dao/usersMongo.manager")
+const userService = require("../services/index.js")
+const authJwt = require("../middlewares/auth.middlewareJwt")
 
 const router = Router()
 
@@ -43,15 +44,16 @@ router.get("/products", async (req, res) => {
     }
 })
 
-// ruta para renderizar usuarios: Protegida con middleware "auth" (solo para administradores)
-router.get("/users", auth, async (req, res) => {
-    try {
-        const { numPage, limit } = req.query
 
-        const {users, hasNextPage, hasPrevPage, nextPage, prevPage, page } = await        userService.getAllUsers(
-                parseInt(numPage) || 1,
-                parseInt(limit) || 5
-        )
+router.get("/users",  async (req, res) => {
+    try {
+        const page = parseInt(req.query.numPage) || 1;
+        const limit = req.query.limit ? parseInt(req.query.limit) : 2;
+
+        console.log(`Ruta - Página: ${page}, Límite: ${limit}`); // 🔍 Debug
+
+        const { users, hasNextPage, hasPrevPage, nextPage, prevPage } = 
+            await userService.getItems(page, limit);
 
         res.render("users", {
             users,
@@ -60,12 +62,12 @@ router.get("/users", auth, async (req, res) => {
             nextPage,
             prevPage,
             page
-        })
+        });
     } catch (error) {
-        console.error("Error al obtener los usuarios:", error.message)
-        res.status(500).send({ error: "Ocurrió un error al obtener los usuarios." })
+        console.error("Error al obtener los usuarios:", error.message);
+        res.status(500).send({ error: "Ocurrió un error al obtener los usuarios." });
     }
-})
+});
 
 
 
