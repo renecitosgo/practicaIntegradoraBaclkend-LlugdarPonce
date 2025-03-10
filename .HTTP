@@ -1,0 +1,36 @@
+# las pruebas con .http y rest client me traen problemas... no funcionan correctamente. POSTMAN SI FUNCIONA
+
+
+# users
+
+# GET http://localhost:8080/api/users
+
+
+# POST http://localhost:8080/api/users
+
+# Content-Type: application/json
+
+# { "title": "Batería 12x91",
+# "description": "batería 12x91 para camioneta",
+# "price": 124000,
+# "thumbnails": "Array (1)",
+# "code": 121212234,
+# "stock": 31
+# }
+
+
+# ###
+# GET http://localhost:8080/api/users/uidUIDuid
+
+# ###
+# PUT http://localhost:8080/api/users/uidUIDuid
+
+# ###
+# DELETE http://localhost:8080/api/users/uidUIDuid
+
+
+
+
+
+
+
